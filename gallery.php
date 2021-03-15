@@ -98,22 +98,22 @@ if (mysqli_connect_errno()) {
         }
 
         $query = "SELECT Filename, Name, Date, Photographer, Location FROM Images";
-        $stmt = $db->prepare($query);
-        $stmt->execute();
-        $stmt->store_result();
+        $statement = $db->prepare($query);
+        $statement->execute();
+        $statement->store_result();
 
-        $stmt->bind_result($filename, $name, $date, $photographer, $location);
+        $statement->bind_result($filename, $name, $date, $photographer, $location);
         
-        echo "<p>Number of images found: ".$stmt->num_rows."</p>";
+        echo "<p>Number of images found: ".$statement->num_rows."</p>";
 
-        while($stmt->fetch()) {
+        while($statement->fetch()) {
             echo "<h3><img src=\"uploads/" . $filename . "\"/><br>";
             echo "Name: " . $name . "<br>";
             echo "Date: " . $date . "<br>";
             echo "Photographer: " . $photographer . "<br>";
             echo "Location: " . $location . "<br><br></h3>";
         }
-        $stmt->free_result();
+        $statement->free_result();
         $db->close();
     ?>
 </html>
