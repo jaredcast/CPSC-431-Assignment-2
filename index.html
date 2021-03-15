@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head>
+ 	<meta charset = "utf-8"/>
+   	<meta name = "viewport" content = "width=device-width, intitial-scale=1"/>
+   	<title>Add photo to gallery</title>
+   	<link rel = "stylesheet" type = "text/css" href = "style.css"/>
+  </head>
+
+  <body>
+    
+    <section id = "title">
+      <p>Photo Gallery</p>
+    </section>
+
+    <section id = "photo_input">
+      <form action="gallery.php" method="post" enctype="multipart/form-data">
+        <table style="border: 0px;">
+          <p>Add Photo to Gallery</p>
+              <tr>
+                <td>Photo name:</td>
+                <td><input type="text" name="name" size="20" maxlength="100" /></td>
+              </tr>
+              <tr>
+                <td>Date taken:</td>
+                <td><input type="date" name="date" size="20" maxlength="100" /></td>
+              </tr>
+              <tr>
+                <td>Photographer:</td>
+                <td><input type="text" name="photographer" size="20" maxlength="100" /></td>
+              </tr>
+              <tr>
+                <td>Location:</td>
+                <td><input type="text" name="location" size="20" maxlength="100"/></td>
+              </tr>    
+              <tr>
+                <td colspan="2" style="text-align: center;"><input type="file" name="imgUpload" id="imgUpload"></td>
+              </tr> 
+              <tr>
+                <td colspan="2" style="text-align: center;"><input type="submit" value="Submit" /></td>
+              </tr>
+        </table>
+      </form>
+    </section>
+    <footer style = "margin-top: 127px; text-align: center; padding-top: 5px"> 
+      <p>Created by:</p> 
+      <p>Jared Castaneda and Efrain Lozada Trujillo</p>
+    </footer>
+  </body>
+</html>
