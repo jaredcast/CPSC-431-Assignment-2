@@ -1,0 +1,106 @@
+.gallery-container{
+	display: flex;
+	flex-wrap: wrap;
+	flex-direction: row;
+	justify-content: flex-start;
+	align-content: flex-start;
+
+}
+
+.gallery-container a{
+	width: 230px;
+	margin: 20px 10px 0px 10px;
+	text-decoration: none;
+}
+
+.gallery-container p{
+	padding-left: 30px;
+	width: 100%;
+	margin: 16px 0px 0px 0px;
+	-webkit-text-stroke: thin;
+	text-transform: capitalize;
+    	text-align: left;
+}
+
+.gallery-container h3{
+	font-family: Catamaran;
+    	font-weight: 300;
+    	padding-left: 30px;
+   	 margin: 0px 0px 0px 0px;
+    	text-align: justify;
+}
+
+header{
+	background-color: #404040;
+	color: white;
+	padding-top: 60px;
+	margin: 0px;
+}
+
+body{
+	font: 1.5 'Baskervill Old Face', 'Arial Rounded MT', 'Times New Roman';
+	background-color: white;
+	color: #314152;
+	margin: 0px;
+}
+
+#title{
+	text-align: center;
+}
+
+#title p{
+	background-color: #314152;
+	font-size: 35px;
+	color: white;
+	margin: 0px;
+}
+
+#photo_input{
+	margin: 0px 0px 0px 12px;
+}
+
+#photo_input p{
+	font-size: 30px;
+	text-decoration: overline black;
+}
+
+h2{
+	padding-left: 30px;
+	text-decoration: underline;
+	text-align: center;
+}
+
+.gallery-upload form{
+	padding-left: 30px;
+	display: inline;
+}
+
+img{
+	height: 220px;
+	width: 280px;
+	margin: 20px 10px 0px 1px;
+
+}
+
+.container{
+	flex-wrap: wrap;
+	flex-direction: row;
+	justify-content: flex-start;
+	align-content: flex-start;
+
+	font-family: Catamaran;
+	font-weight: 300;
+	padding-left: 20px;
+	margin: 0px 0px 0px 0px;
+
+}
+
+footer{
+	margin-top: 40px;
+	background-color: #404040;
+	color: white;
+    	bottom: 0;
+	left: 0;
+	width: 100%;
+	position:fixed;
+}
