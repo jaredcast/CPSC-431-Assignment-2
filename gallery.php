@@ -50,70 +50,80 @@ if (mysqli_connect_errno()) {
     //Sorting functions for later on. User defined, will compare each value.
     //Array positions: 0 - Filename. 1 - Name. 2 - Date. 3 - Photographer. 4 - Location.
 
-    function compareName($x, $y) {
-        if (strtolower($x[1]) == strtolower($y[1])) {
-            return 0;
-        } else if (strtolower($x[1]) < strtolower($y[1])) {
-            return -1;
-        } else {
-            return 1;
-        }
-    }
-    function compareDate($x, $y) {
-        if (strtolower($x[2]) == strtolower($y[2])) {
-            return 0;
-        } else if (strtolower($x[2]) < strtolower($y[2])) {
-            return -1;
-        } else {
-            return 1;
-        }
-    }
-    function comparePG($x, $y) {
-        if (strtolower($x[3]) == strtolower($y[3])) {
-            return 0;
-        } else if (strtolower($x[3]) < strtolower($y[3])) {
-            return -1;
-        } else {
-            return 1;
-        }
-    }
-    function compareLocation($x, $y) {
-        if (strtolower($x[4]) == strtolower($y[4])) {
-            return 0;
-        } else if (strtolower($x[4]) < strtolower($y[4])) {
-            return -1;
-        } else {
-            return 1;
-        }
-    }
 ?>
 
 <!DOCTYPE html>
 <html>
-    <?php
-        @$db = new mysqli('mariadb', 'cs431s26', 'Uo3io9ve', 'cs431s26');
-        if (mysqli_connect_errno()) {
-            echo "<p>Error: Cannot connect to database!</p>";
-            exit;
-        }
+    <head>
+		<meta charset="utf-8">
+		<title> My Gallery </title>
+		<meta name = "viewport" content = "width = device-width, initial-scale = 1.0">
+		<link rel="stylesheet" href="styles.css">
+	</head>
 
-        $query = "SELECT Filename, Name, Date, Photographer, Location FROM Images";
-        $statement = $db->prepare($query);
-        $statement->execute();
-        $statement->store_result();
 
-        $statement->bind_result($filename, $name, $date, $photographer, $location);
-        
-        echo "<p>Number of images found: ".$statement->num_rows."</p>";
+    <div class = "gallery-upload">
+        <form action = "gallery.php" method = "GET">
+            <td><select name="choice" onchange="this.form.submit();">
+                <option>Sort By</option>
+                    <option value = "name">Name</option>
+                    <option value = "date">Date</option>
+                    <option value = "pg">Photographer</option>
+                    <option value = "loc">Location</option>
+                    <option value = "">Default</option>
+                </select>
+            </td>
+        </form>
+        <form action = "index.html" method = "post">
+        <button type = "submit" name = "submit"> Upload Photo </button>
+    </div>	
+    <div class = "gallery-container">
 
-        while($statement->fetch()) {
-            echo "<h3><img src=\"uploads/" . $filename . "\"/><br>";
-            echo "Name: " . $name . "<br>";
-            echo "Date: " . $date . "<br>";
-            echo "Photographer: " . $photographer . "<br>";
-            echo "Location: " . $location . "<br><br></h3>";
-        }
-        $statement->free_result();
-        $db->close();
-    ?>
+        <?php
+            @$db = new mysqli('mariadb', 'cs431s26', 'Uo3io9ve', 'cs431s26');
+            if (mysqli_connect_errno()) {
+                echo "<p>Error: Cannot connect to database!</p>";
+                exit;
+            }
+            $query = "SELECT Filename, Name, Date, Photographer, Location FROM Images";
+            if ($choice == "name") {
+                echo ' <p> Sorting by name </p>';
+                $query = "SELECT Filename, Name, Date, Photographer, Location FROM Images ORDER BY Name";
+            }
+            else if ($choice == "date") {
+                echo ' <p> Sorting by date </p>';
+                $query = "SELECT Filename, Name, Date, Photographer, Location FROM Images ORDER BY Date";
+            }
+            else if ($choice == "pg") {
+                echo ' <p> Sorting by photographer </p>';
+                $query = "SELECT Filename, Name, Date, Photographer, Location FROM Images ORDER BY Photographer";
+            }
+            else if ($choice == "loc") {
+                echo ' <p> Sorting by location </p>';
+                $query = "SELECT Filename, Name, Date, Photographer, Location FROM Images ORDER BY Location";
+            }
+            else {
+                echo ' <p>Sorting by default</p>';           
+            }
+
+            #$query = "SELECT Filename, Name, Date, Photographer, Location FROM Images";
+            $statement = $db->prepare($query);
+            $statement->execute();
+            $statement->store_result();
+
+            $statement->bind_result($filename, $name, $date, $photographer, $location);
+            
+            echo "<p>Number of images found: ".$statement->num_rows."</p>";
+
+            while($statement->fetch()) {
+                echo "<h3><img src=\"uploads/" . $filename . "\"/><br>";
+                echo "Name: " . $name . "<br>";
+                echo "Date: " . $date . "<br>";
+                echo "Photographer: " . $photographer . "<br>";
+                echo "Location: " . $location . "<br><br></h3>";
+            }
+            $statement->free_result();
+            $db->close();
+        ?>
+    </div>
 </html>
