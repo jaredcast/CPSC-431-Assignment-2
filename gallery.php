@@ -28,7 +28,7 @@ $uploadStatus = "temp";
 			exit;
 		}
 
-        $query = "INSERT INTO Images VALUES (?, ?, ?, ?, ?)";
+        $query = "INSERT INTO Images (Filename, Name, Date, Photographer, Location) VALUES (?, ?, ?, ?, ?)";
         $statement = $db->prepare($query);
         $statement->bind_param('sssss', $filename, $name, $date, $photographer, $location);
         $statement->execute();
@@ -38,12 +38,6 @@ $uploadStatus = "temp";
         } else {
             $uploadStatus = "<p>An error has occurred. Image failed to upload.</p>";
         }
-
-        // @$fp = fopen("/home/titan0/cs431s/cs431s26/homepage/assignment1/photodata.txt", 'ab');
-        // if (!$fp) {
-        //     echo "<p><strong> ERROR: Writing to text file did not work. Please try again.</strong></p>";
-        //     exit;
-        // }
         $db->close(); 
 	}
 
