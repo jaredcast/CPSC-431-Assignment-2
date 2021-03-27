@@ -8,25 +8,25 @@ $choice = $_GET['choice']; //The sorting choice we want to work with - name, dat
 $filename = $_FILES["imgUpload"]["name"];
 $imgType = $_FILES["imgUpload"]["type"];
 $errorImg = False;
+$uploadStatus = "temp";
 
-@$db = new mysqli('mariadb', 'cs431s26', 'Uo3io9ve', 'cs431s26');
-if (mysqli_connect_errno()) {
-    echo "<p>Error: Cannot connect to database!</p>";
-    exit;
- }
+    @$db = new mysqli('mariadb', 'cs431s26', 'Uo3io9ve', 'cs431s26');
+    if (mysqli_connect_errno()) {
+        echo "<p>Error: Cannot connect to database!</p>";
+        exit;
+    }
+
+    if ($imgType && $imgType != 'image/png' && $imgType != 'image/jpg' && $imgType != 'image/jpeg' && $imgType != 'image/gif') {
+        echo 'ERROR: NOT A PNG, JPEG, GIF, or JPG.';
+        exit;
+    }
 	
-	//Move the uploaded file into the text file, separated by strings
 	if (move_uploaded_file($_FILES["imgUpload"]["tmp_name"],"uploads/".$filename)) {
 		//$outputStr = $filename."\t".$name."\t".$date."\t".$photographer."\t".$location."\n";
-        // if (!$name || !$date || !$photographer || !$location) {
-		// 	echo "ERROR: Missing data.";
-		// 	exit;
-		// }
-
-        // if ($imgType && $imgType != 'image/png' && $imgType != 'image/jpg' && $imgType != 'image/jpeg' && $imgType != 'image/gif') {
-        //     echo 'ERROR: NOT A PNG, JPEG, GIF, or JPG.';
-        //     exit;
-        // }
+        if (!$name || !$date || !$photographer || !$location) {
+			echo "ERROR: Missing data.";
+			exit;
+		}
 
         $query = "INSERT INTO Images VALUES (?, ?, ?, ?, ?)";
         $statement = $db->prepare($query);
@@ -34,9 +34,9 @@ if (mysqli_connect_errno()) {
         $statement->execute();
 
         if ($statement->affected_rows > 0) {
-            echo  "<p>Image successfully added.</p>";
+            $uploadStatus = "<p>Image successfully added.</p>";
         } else {
-            echo "<p>An error has occurred. Image failed to upload.</p>";
+            $uploadStatus = "<p>An error has occurred. Image failed to upload.</p>";
         }
 
         // @$fp = fopen("/home/titan0/cs431s/cs431s26/homepage/assignment1/photodata.txt", 'ab');
@@ -61,7 +61,10 @@ if (mysqli_connect_errno()) {
 		<link rel="stylesheet" href="styles.css">
 	</head>
 
-
+    <section id = "title">
+      <p>View All Photos</p>
+    </section>
+    <br>
     <div class = "gallery-upload">
         <form action = "gallery.php" method = "GET">
             <td><select name="choice" onchange="this.form.submit();">
@@ -74,12 +77,17 @@ if (mysqli_connect_errno()) {
                 </select>
             </td>
         </form>
+
+
         <form action = "index.html" method = "post">
-        <button type = "submit" name = "submit"> Upload Photo </button>
+            <button type = "submit" name = "submit"> Upload Photo </button>
+        </form>
     </div>	
     <div class = "gallery-container">
-
         <?php
+            if ($uploadStatus != "temp") {
+                echo $uploadStatus;
+            }
             @$db = new mysqli('mariadb', 'cs431s26', 'Uo3io9ve', 'cs431s26');
             if (mysqli_connect_errno()) {
                 echo "<p>Error: Cannot connect to database!</p>";
@@ -110,7 +118,7 @@ if (mysqli_connect_errno()) {
             $statement = $db->prepare($query);
             $statement->execute();
             $statement->store_result();
-
+            
             $statement->bind_result($filename, $name, $date, $photographer, $location);
             
             echo "<p>Number of images found: ".$statement->num_rows."</p>";
@@ -126,4 +134,8 @@ if (mysqli_connect_errno()) {
             $db->close();
         ?>
     </div>
+    <footer style = "text-align: center; padding-top: 5px">
+		<p>Created by:</p> 
+		<p>Jared Castaneda and Efrain Lozada Trujillo</p>
+	</footer>
 </html>
