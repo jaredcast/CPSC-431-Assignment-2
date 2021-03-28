@@ -1,4 +1,7 @@
 <?php
+// Jared Castaneda 
+// Efrain Lozada Trujillo
+// CPSC 431 Assignment 2
 $tmp_name = "temp"; //Temporary filename
 $name = $_POST['name'];
 $date = $_POST['date'];
@@ -10,24 +13,28 @@ $imgType = $_FILES["imgUpload"]["type"];
 $errorImg = False;
 $uploadStatus = "temp";
 
+    //Connect to mariadb
     @$db = new mysqli('mariadb', 'cs431s26', 'Uo3io9ve', 'cs431s26');
     if (mysqli_connect_errno()) {
         echo "<p>Error: Cannot connect to database!</p>";
         exit;
     }
 
+    //Check image filetype
     if ($imgType && $imgType != 'image/png' && $imgType != 'image/jpg' && $imgType != 'image/jpeg' && $imgType != 'image/gif') {
         echo 'ERROR: NOT A PNG, JPEG, GIF, or JPG.';
         exit;
     }
 	
+    //Moving file to folder
 	if (move_uploaded_file($_FILES["imgUpload"]["tmp_name"],"uploads/".$filename)) {
-		//$outputStr = $filename."\t".$name."\t".$date."\t".$photographer."\t".$location."\n";
+		//Check if there is missing data
         if (!$name || !$date || !$photographer || !$location) {
 			echo "ERROR: Missing data.";
 			exit;
 		}
 
+        //Prepare the SQL query, then store it in a statement. Bind the parameters that are passed in from the html page, then execute.
         $query = "INSERT INTO Images (Filename, Name, Date, Photographer, Location) VALUES (?, ?, ?, ?, ?)";
         $statement = $db->prepare($query);
         $statement->bind_param('sssss', $filename, $name, $date, $photographer, $location);
@@ -40,10 +47,6 @@ $uploadStatus = "temp";
         }
         $db->close(); 
 	}
-
-    //Sorting functions for later on. User defined, will compare each value.
-    //Array positions: 0 - Filename. 1 - Name. 2 - Date. 3 - Photographer. 4 - Location.
-
 ?>
 
 <!DOCTYPE html>
@@ -79,14 +82,19 @@ $uploadStatus = "temp";
     </div>	
     <div class = "gallery-container">
         <?php
+            //Print out status of upload if something was uploaded
             if ($uploadStatus != "temp") {
                 echo $uploadStatus;
             }
+
+            //Connect to database
             @$db = new mysqli('mariadb', 'cs431s26', 'Uo3io9ve', 'cs431s26');
             if (mysqli_connect_errno()) {
                 echo "<p>Error: Cannot connect to database!</p>";
                 exit;
             }
+
+            //Prepare default query and change it based on the sorting option $choice. This is from the dropdown box
             $query = "SELECT Filename, Name, Date, Photographer, Location FROM Images";
             if ($choice == "name") {
                 echo ' <p> Sorting by name </p>';
@@ -108,7 +116,7 @@ $uploadStatus = "temp";
                 echo ' <p>Sorting by default</p>';           
             }
 
-            #$query = "SELECT Filename, Name, Date, Photographer, Location FROM Images";
+            //Execute the statement
             $statement = $db->prepare($query);
             $statement->execute();
             $statement->store_result();
@@ -117,6 +125,7 @@ $uploadStatus = "temp";
             
             echo "<p>Number of images found: ".$statement->num_rows."</p>";
 
+            //While the statement fetches different queries in the database, keep printing out the information.
             while($statement->fetch()) {
                 echo "<h3><img src=\"uploads/" . $filename . "\"/><br>";
                 echo "Name: " . $name . "<br>";
@@ -128,8 +137,10 @@ $uploadStatus = "temp";
             $db->close();
         ?>
     </div>
-    <footer style = "text-align: center; padding-top: 5px">
+    <footer class="footer">
+        <!-- Had a lot of trouble getting this to work D: -->
 		<p>Created by:</p> 
 		<p>Jared Castaneda and Efrain Lozada Trujillo</p>
-	</footer>
+    </footer>
+
 </html>

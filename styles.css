@@ -79,7 +79,6 @@ img{
 	height: 220px;
 	width: 280px;
 	margin: 20px 10px 0px 1px;
-
 }
 
 .container{
@@ -95,12 +94,9 @@ img{
 
 }
 
-footer{
-	margin-top: 40px;
+footer {
+	text-align: center;
+	padding: 3px;
 	background-color: #404040;
 	color: white;
-    	bottom: 0;
-	left: 0;
-	width: 100%;
-	position:fixed;
-}
+  }
